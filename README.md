@@ -105,7 +105,6 @@ If you enjoyed PathHunt and want to level up:
 Issues and pull requests welcome. Ideas for good contributions:
 
 - More challenges (SQL injection simulation, JWT decoding, SSRF concepts, prototype pollution, etc.)
-- Translations of the hints to other languages
 - Accessibility improvements
 - Alternative themes
 
