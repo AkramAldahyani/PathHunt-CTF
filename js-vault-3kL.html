@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Challenge 03 — Base64 JavaScript — PathHunt CTF</title>
+    <link rel="stylesheet" href="assets/style.css" />
+  </head>
+  <body>
+    <div data-nav></div>
+
+    <main class="container challenge-page">
+      <a href="dashboard.html" class="back-link">← back to dashboard</a>
+
+      <header class="challenge-header">
+        <div class="challenge-num">Challenge 03 · Medium · 150 pts</div>
+        <h1>Base64 JavaScript</h1>
+        <div class="meta">
+          <span>Category: Decoding</span>
+          <span>·</span>
+          <span>Technique: Read inline JS + decode Base64</span>
+        </div>
+      </header>
+
+      <div class="challenge-content">
+        <div class="panel">
+          <div class="panel-title">Brief</div>
+          <div class="panel-body">
+            <p>
+              Developers love to "hide" strings by encoding them in Base64. It's
+              trivially reversible — anyone with a browser console can decode it
+              in one line. Never rely on Base64 for security. It's obfuscation,
+              not encryption.
+            </p>
+            <p>
+              Two variables are waiting for you at the bottom of this page's
+              inline
+              <span class="inline-code">&lt;script&gt;</span>. Decode them and
+              you've got the flag and the next path.
+            </p>
+
+            <div class="hint-box">
+              <strong>Hint</strong>
+              In the browser console,
+              <span class="inline-code">atob('...')</span> decodes a Base64
+              string. <span class="inline-code">btoa('...')</span> encodes one.
+              Paste each variable and run it.
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">Console walkthrough</div>
+          <div class="panel-body">
+            <p>Open DevTools (F12) → <em>Console</em> tab. Type:</p>
+            <div class="code-block">
+              atob('ZmxhZ3tkZWNvZGVfbWV9') atob('L3JvYm90LXpvbmUuaHRtbA==')
+            </div>
+            <p style="margin-top: 14px">
+              Each <span class="inline-code">atob</span> call returns the
+              decoded string. One is your flag, the other is the path to
+              Challenge 04.
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>Challenge 03 of 10 · PathHunt CTF</p>
+    </footer>
+
+    <script src="assets/script.js"></script>
+    <script>
+      /* =============================================================
+       Challenge 03 payload
+       Two Base64 strings. Decode with atob() to reveal:
+         - the flag
+         - the next challenge path
+    ============================================================= */
+
+      // Base64-encoded flag
+      let secret = "ZmxhZ3tkZWNvZGVfbWV9";
+
+      // Base64-encoded next challenge path
+      let next = "L3JvYm90LXpvbmUuaHRtbA==";
+
+      // Uncomment to test:
+      // console.log(atob(secret));
+      // console.log(atob(next));
+    </script>
+  </body>
+</html>

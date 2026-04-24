@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Challenge 10 — Final Decode — PathHunt CTF</title>
+    <link rel="stylesheet" href="assets/style.css" />
+  </head>
+  <body>
+    <div data-nav></div>
+
+    <main class="container challenge-page">
+      <a href="dashboard.html" class="back-link">← back to dashboard</a>
+
+      <header class="challenge-header">
+        <div class="challenge-num" style="color: var(--neon-green)">
+          Challenge 10 · Final · 300 pts
+        </div>
+        <h1>Final Decode</h1>
+        <div class="meta">
+          <span>Category: Decoding</span>
+          <span>·</span>
+          <span>Technique: atob() + console work</span>
+        </div>
+      </header>
+
+      <div class="challenge-content">
+        <div class="panel">
+          <div class="panel-title">Brief</div>
+          <div class="panel-body">
+            <p>
+              You've made it to the last gate, hunter. One more decode stands
+              between you and the victory flag. Everything you've learned —
+              reading source, using the console, decoding Base64 — comes
+              together here.
+            </p>
+            <p>
+              There are <strong>two</strong> encoded payloads in the script at
+              the bottom of this page:
+            </p>
+            <ul
+              style="
+                padding-left: 20px;
+                margin-top: 10px;
+                color: var(--text-dim);
+              "
+            >
+              <li>
+                <strong style="color: var(--text)">final</strong> — a single
+                Base64 string. The easy path.
+              </li>
+              <li>
+                <strong style="color: var(--text)">vault</strong> — Base64 over
+                XOR with a key. The hard path, same flag.
+              </li>
+            </ul>
+            <p style="margin-top: 12px">
+              Either one lands you the flag. Pick the one you feel like solving.
+            </p>
+
+            <div class="hint-box">
+              <strong>Easy path</strong>
+              In the console: <span class="inline-code">atob(final)</span>
+            </div>
+
+            <div
+              class="hint-box"
+              style="
+                background: rgba(255, 184, 77, 0.06);
+                border-color: rgba(255, 184, 77, 0.2);
+              "
+            >
+              <strong style="color: var(--neon-amber)"
+                >Hard path (optional)</strong
+              >
+              Base64-decode <span class="inline-code">vault</span>, then XOR
+              each byte with the repeating key
+              <span class="inline-code">"pathhunt"</span>. The snippet is
+              provided in the console hints below.
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">Console snippets</div>
+          <div class="panel-body">
+            <p style="color: var(--text-dim); font-size: 0.9rem">
+              Paste any of these into DevTools → Console:
+            </p>
+            <div class="code-block">
+              // Easy — one line atob(final) // Hard — XOR with key "pathhunt"
+              [...atob(vault)].map((c, i) =&gt;
+              String.fromCharCode(c.charCodeAt(0) ^ "pathhunt".charCodeAt(i %
+              8)) ).join('')
+            </div>
+          </div>
+        </div>
+
+        <div class="panel" style="border-color: rgba(0, 255, 163, 0.25)">
+          <div class="panel-title" style="color: var(--neon-green)">
+            What you've learned
+          </div>
+          <div class="panel-body">
+            <ul
+              style="
+                padding-left: 20px;
+                color: var(--text-dim);
+                line-height: 1.9;
+              "
+            >
+              <li>
+                <strong style="color: var(--text)">Recon:</strong> View Source,
+                CSS files, robots.txt, directory guessing
+              </li>
+              <li>
+                <strong style="color: var(--text)">Protocol:</strong> HTTP
+                headers carry real information
+              </li>
+              <li>
+                <strong style="color: var(--text)">Client trust:</strong>
+                Cookies, login logic — never trust the browser
+              </li>
+              <li>
+                <strong style="color: var(--text)">Network:</strong> API
+                endpoints leak more than the UI shows
+              </li>
+              <li>
+                <strong style="color: var(--text)">Decoding:</strong> Base64 is
+                obfuscation, not encryption
+              </li>
+            </ul>
+            <p style="margin-top: 16px">
+              These reflexes — <em>inspect, decode, explore, question</em> — are
+              the foundation of every real-world web security engagement. You
+              just walked the first mile.
+            </p>
+            <p
+              style="
+                margin-top: 12px;
+                font-family: var(--font-mono);
+                color: var(--neon-blue);
+              "
+            >
+              ✓ Good hunting, agent.
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>Challenge 10 of 10 · PathHunt CTF · You made it.</p>
+    </footer>
+
+    <script src="assets/script.js"></script>
+    <script>
+      /* =============================================================
+       🎯 Final Challenge Payloads
+       Two encoded forms of the same flag. Either decodes.
+    ============================================================= */
+
+      // Easy path — straight Base64
+      let final = "ZmxhZ3t5b3VfY29tcGxldGVkX2l0fQ==";
+
+      // Hard path — Base64 over (XOR with repeating key "pathhunt")
+      let vault = "Fg0VDxMMAQEvAhsFGBkLABUFKwEcCA==";
+
+      // Quick verification:
+      //   atob(final)
+      //   [...atob(vault)].map((c,i)=>String.fromCharCode(c.charCodeAt(0)^"pathhunt".charCodeAt(i%8))).join('')
+    </script>
+  </body>
+</html>

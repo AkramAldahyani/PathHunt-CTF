@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Challenge 07 — Cookie Tampering — PathHunt CTF</title>
+    <link rel="stylesheet" href="assets/style.css" />
+  </head>
+  <body>
+    <div data-nav></div>
+
+    <main class="container challenge-page">
+      <a href="dashboard.html" class="back-link">← back to dashboard</a>
+
+      <header class="challenge-header">
+        <div class="challenge-num">Challenge 07 · Medium · 200 pts</div>
+        <h1>Cookie Tampering</h1>
+        <div class="meta">
+          <span>Category: Client trust</span>
+          <span>·</span>
+          <span>Technique: Cookie modification</span>
+        </div>
+      </header>
+
+      <div class="challenge-content">
+        <div class="panel">
+          <div class="panel-title">Brief</div>
+          <div class="panel-body">
+            <p>
+              Cookies are key/value pairs stored by your browser and sent with
+              every request. Some sites use cookies to track what
+              <em>role</em> the user has —
+              <span class="inline-code">role=user</span>,
+              <span class="inline-code">role=admin</span>, and so on.
+            </p>
+            <p>
+              The mistake: trusting the browser to tell the truth. If the server
+              never verifies the role on its end, you can simply change the
+              cookie and promote yourself. Real sites have fallen to this exact
+              bug.
+            </p>
+
+            <div class="hint-box">
+              <strong>Hint</strong>
+              The mock cookie editor below mimics what DevTools →
+              <em>Application</em> → <em>Cookies</em> looks like. Your current
+              role is <span class="inline-code">user</span>. Change it to
+              <span class="inline-code">admin</span> and save.
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">🍪 Cookie editor</div>
+          <div class="panel-body">
+            <p
+              style="
+                font-family: var(--font-mono);
+                font-size: 0.85rem;
+                color: var(--text-muted);
+              "
+            >
+              // example.com · 3 cookies
+            </p>
+
+            <div class="mock-editor" id="cookie-editor">
+              <div class="cookie-row">
+                <span class="cookie-key">session_id</span>
+                <input type="text" value="a7f3c9e1b0d4" disabled />
+                <span style="color: var(--text-muted); font-size: 0.75rem"
+                  >readonly</span
+                >
+              </div>
+              <div class="cookie-row">
+                <span class="cookie-key">theme</span>
+                <input type="text" value="dark" disabled />
+                <span style="color: var(--text-muted); font-size: 0.75rem"
+                  >readonly</span
+                >
+              </div>
+              <div class="cookie-row">
+                <span class="cookie-key">role</span>
+                <input
+                  type="text"
+                  id="role-input"
+                  value="user"
+                  spellcheck="false"
+                  autocomplete="off"
+                />
+                <button class="btn-small" id="save-btn">Save</button>
+              </div>
+            </div>
+
+            <p
+              id="cookie-status"
+              style="
+                margin-top: 14px;
+                font-family: var(--font-mono);
+                font-size: 0.85rem;
+                color: var(--text-dim);
+              "
+            >
+              Current role:
+              <span id="current-role" style="color: var(--neon-blue)"
+                >user</span
+              >
+            </p>
+
+            <div id="admin-reveal" class="flag-reveal">
+              <div class="label">◆ Privilege escalated · flag captured</div>
+              <div class="flag-text">flag{cookie_tamper}</div>
+              <div class="next-path">
+                Next path: <a href="api-door.html">/api-door.html</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">Real-world note</div>
+          <div class="panel-body">
+            <p>
+              Well-designed sites never put trust decisions in a plain cookie.
+              Instead they use <em>signed sessions</em> (JWT, encrypted cookies)
+              so tampering is detected and rejected server-side. Any decision
+              about "is this user an admin?" lives on the server, not in a
+              cookie the user can edit.
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>Challenge 07 of 10 · PathHunt CTF</p>
+    </footer>
+
+    <script src="assets/script.js"></script>
+    <script>
+      (function () {
+        const input = document.getElementById("role-input");
+        const saveBtn = document.getElementById("save-btn");
+        const current = document.getElementById("current-role");
+        const reveal = document.getElementById("admin-reveal");
+        const status = document.getElementById("cookie-status");
+
+        function save() {
+          const val = input.value.trim().toLowerCase();
+          current.textContent = val || "(empty)";
+
+          if (val === "admin") {
+            current.style.color = "var(--neon-green)";
+            status.innerHTML =
+              '✓ Role elevated: <span style="color: var(--neon-green);">admin</span> · access granted';
+            reveal.classList.add("show");
+            showToast("Admin access granted. Flag revealed.", "success");
+          } else {
+            current.style.color = "var(--neon-blue)";
+            status.innerHTML = `Current role: <span style="color: var(--neon-blue);">${val || "(empty)"}</span>`;
+            reveal.classList.remove("show");
+          }
+        }
+
+        saveBtn.addEventListener("click", save);
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Enter") save();
+        });
+      })();
+    </script>
+  </body>
+</html>

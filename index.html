@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PathHunt CTF — Hunt hidden paths. Capture flags.</title>
+    <meta
+      name="description"
+      content="A beginner-friendly web CTF where you hunt hidden clues, flags and paths across 10 challenges."
+    />
+    <link rel="stylesheet" href="assets/style.css" />
+  </head>
+  <body>
+    <div data-nav></div>
+
+    <main>
+      <!-- HERO -->
+      <section class="hero">
+        <span class="hero-badge">Live mission // 10 challenges waiting</span>
+        <h1>
+          Hunt the paths.<br />
+          <span class="glitch">Capture the flags.</span>
+        </h1>
+        <p class="hero-sub">
+          A beginner-friendly web scavenger hunt. Every page hides a clue, a
+          flag, and a trail to the next. Inspect. Decode. Explore. Submit.
+        </p>
+        <div class="hero-actions">
+          <a href="inspect-me-H3L.html" class="btn btn-primary">
+            Begin mission &rarr;
+          </a>
+          <a href="dashboard.html" class="btn btn-ghost">View dashboard</a>
+        </div>
+
+        <!-- Terminal window -->
+        <div class="terminal" aria-hidden="true">
+          <div class="terminal-bar">
+            <span class="terminal-dot red"></span>
+            <span class="terminal-dot yellow"></span>
+            <span class="terminal-dot green"></span>
+            <span class="terminal-title">~/pathhunt — agent@ctf</span>
+          </div>
+          <div class="terminal-body">
+            <span class="terminal-line"
+              ><span class="prompt">agent@ctf</span>
+              <span class="output">:~$</span>
+              <span class="cmd">whoami</span></span
+            >
+            <span class="terminal-line"
+              ><span class="output">hunter-in-training</span></span
+            >
+            <span class="terminal-line"
+              ><span class="prompt">agent@ctf</span>
+              <span class="output">:~$</span>
+              <span class="cmd">cat mission.txt</span></span
+            >
+            <span class="terminal-line"
+              ><span class="output"
+                >→ 10 web challenges. Each page hides a flag.</span
+              ></span
+            >
+            <span class="terminal-line"
+              ><span class="output"
+                >→ Find clues in HTML, CSS, JS, cookies, headers, APIs.</span
+              ></span
+            >
+            <span class="terminal-line"
+              ><span class="output"
+                >→ Submit flags to track progress. Learn as you go.</span
+              ></span
+            >
+            <span class="terminal-line"
+              ><span class="prompt">agent@ctf</span>
+              <span class="output">:~$</span> <span class="cmd">./start</span
+              ><span class="cursor"></span
+            ></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- EXPLAIN CARDS -->
+      <section class="section container">
+        <div class="section-label">01 // Toolkit</div>
+        <h2 class="section-title">Four skills. Ten puzzles.</h2>
+        <p class="section-desc">
+          Each challenge reinforces one core web-security technique. No prior
+          experience required — just curiosity and a browser.
+        </p>
+
+        <div class="card-grid">
+          <div class="explain-card">
+            <div class="card-icon">01</div>
+            <div class="card-title">Inspect source code</div>
+            <div class="card-desc">
+              View Source, DevTools, comments — developers leave traces. Learn
+              to read them.
+            </div>
+          </div>
+          <div class="explain-card">
+            <div class="card-icon">02</div>
+            <div class="card-title">Decode hidden clues</div>
+            <div class="card-desc">
+              Base64, hex, simple ciphers. Not everything important is written
+              in plain English.
+            </div>
+          </div>
+          <div class="explain-card">
+            <div class="card-icon">03</div>
+            <div class="card-title">Explore directories</div>
+            <div class="card-desc">
+              robots.txt, hidden paths, admin panels. The site is larger than
+              its navigation reveals.
+            </div>
+          </div>
+          <div class="explain-card">
+            <div class="card-icon">04</div>
+            <div class="card-title">Submit flags</div>
+            <div class="card-desc">
+              Every flag is <span class="inline-code">flag{...}</span>. Collect
+              all ten, rank up the leaderboard inside your browser.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- HOW IT WORKS -->
+      <section class="section container">
+        <div class="section-label">02 // Workflow</div>
+        <h2 class="section-title">The hunt, in three moves.</h2>
+        <p class="section-desc">
+          Most CTF pages hide <em>two</em> things: a flag, and a hint to the
+          next page. Your job is to find both.
+        </p>
+
+        <div class="card-grid">
+          <div class="explain-card">
+            <div class="card-icon">&rarr;</div>
+            <div class="card-title">Land on a page</div>
+            <div class="card-desc">
+              Read every visible word. Then open DevTools and read everything
+              you can't see.
+            </div>
+          </div>
+          <div class="explain-card">
+            <div class="card-icon">&#x2316;</div>
+            <div class="card-title">Find the flag</div>
+            <div class="card-desc">
+              Comments, cookies, responses, scripts, styles — the flag is there.
+              The challenge is where.
+            </div>
+          </div>
+          <div class="explain-card">
+            <div class="card-icon">&#x2713;</div>
+            <div class="card-title">Follow the trail</div>
+            <div class="card-desc">
+              Each flag comes with a path to the next challenge. Submit the
+              flag. Move on. Repeat.
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA -->
+      <section class="section container" style="text-align: center">
+        <div class="section-label">03 // Ready?</div>
+        <h2 class="section-title">Your first page is waiting.</h2>
+        <p class="section-desc" style="margin: 0 auto 32px">
+          Challenge 01 teaches the single most important CTF reflex:
+          <em>read the source</em>.
+        </p>
+        <a href="inspect-me-H3L.html" class="btn btn-primary">
+          Start challenge 01 &rarr;
+        </a>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>
+        PathHunt CTF &middot; Built for learning, not for ranking. Good hunting,
+        agent. <span style="color: var(--neon-green)">&#x25A0;</span>
+      </p>
+    </footer>
+
+    <script src="assets/script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "status": "ok",
+  "message": "Hidden API endpoint discovered. Good work, hunter.",
+  "flag": "flag{api_explorer}",
+  "next": "/login-gate.html",
+  "notes": [
+    "Real APIs often return sensitive data without requiring auth.",
+    "Always inspect XHR/fetch traffic in the Network tab.",
+    "Look for endpoints named /api/, /v1/, /internal/, /debug/, /data/."
+  ]
+}

@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Challenge 05 — Directory Fuzzing — PathHunt CTF</title>
+    <link rel="stylesheet" href="assets/style.css" />
+  </head>
+  <body>
+    <div data-nav></div>
+
+    <main class="container challenge-page">
+      <a href="dashboard.html" class="back-link">← back to dashboard</a>
+
+      <header class="challenge-header">
+        <div class="challenge-num">Challenge 05 · Medium · 150 pts</div>
+        <h1>Directory Fuzzing</h1>
+        <div class="meta">
+          <span>Category: Recon</span>
+          <span>·</span>
+          <span>Technique: Path discovery</span>
+        </div>
+      </header>
+
+      <div class="challenge-content">
+        <div class="panel">
+          <div class="panel-title">Brief</div>
+          <div class="panel-body">
+            <p>
+              Some directories are not linked anywhere on the site. They exist,
+              but no page navigates to them, and they don't show up in
+              <span class="inline-code">robots.txt</span>. They're hidden purely
+              by being unguessable — which is why hunters <em>guess</em>.
+            </p>
+            <p>
+              The technique is called
+              <strong style="color: var(--neon-amber)"
+                >directory fuzzing</strong
+              >
+              — you try common names (<span class="inline-code">/admin</span>,
+              <span class="inline-code">/backup</span>,
+              <span class="inline-code">/dev</span>,
+              <span class="inline-code">/test</span>,
+              <span class="inline-code">/old</span>,
+              <span class="inline-code">/dev-panel</span>, etc.) and see what
+              responds with 200 OK instead of 404.
+            </p>
+
+            <div class="hint-box">
+              <strong>Hint</strong>
+              A developer panel was left on this deployment. Try paths like
+              <span class="inline-code">/dev/</span>,
+              <span class="inline-code">/dev-panel/</span>,
+              <span class="inline-code">/admin/</span>,
+              <span class="inline-code">/panel/</span>. One of them actually
+              exists.
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">Why it works</div>
+          <div class="panel-body">
+            <p>
+              Web servers often serve a directory's
+              <span class="inline-code">index.html</span>
+              automatically when you visit the folder path. So
+              <span class="inline-code">/secret/</span> will serve
+              <span class="inline-code">/secret/index.html</span> without
+              showing it in the URL.
+            </p>
+            <p style="margin-top: 12px">
+              Real hunters automate this with tools like <em>ffuf</em>,
+              <em>gobuster</em>, or <em>feroxbuster</em> against a wordlist.
+              Today, you can do it by hand — there's only a handful of
+              candidates.
+            </p>
+            <p
+              style="
+                margin-top: 12px;
+                color: var(--text-muted);
+                font-size: 0.88rem;
+              "
+            >
+              Look for a <em>developer panel</em>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>Challenge 05 of 10 · PathHunt CTF</p>
+    </footer>
+
+    <script src="assets/script.js"></script>
+  </body>
+</html>

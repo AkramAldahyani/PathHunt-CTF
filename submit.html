@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Submit Flag — PathHunt CTF</title>
+    <link rel="stylesheet" href="assets/style.css" />
+  </head>
+  <body>
+    <div data-nav></div>
+
+    <main class="submit-wrap">
+      <div class="submit-card">
+        <div class="section-label">&gt; submit.sh</div>
+        <h1>Submit a flag</h1>
+        <p class="lede">
+          Paste any flag you've captured. The format is always
+          <span class="inline-code">flag{...}</span>. Case matters.
+        </p>
+
+        <form id="submit-form" onsubmit="return false;">
+          <div class="form-group">
+            <label class="form-label" for="flag-input">Flag</label>
+            <input
+              type="text"
+              id="flag-input"
+              class="form-input"
+              placeholder="flag{...}"
+              autocomplete="off"
+              spellcheck="false"
+            />
+          </div>
+          <button type="submit" class="btn-submit" id="submit-btn">
+            Verify &amp; capture &rarr;
+          </button>
+          <div
+            class="message"
+            id="message"
+            role="status"
+            aria-live="polite"
+          ></div>
+        </form>
+
+        <div class="captured" id="captured" style="display: none">
+          <h3>Your captured flags</h3>
+          <div class="flag-list" id="flag-list"></div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>
+        PathHunt CTF &middot; Flags are verified against SHA-256 hashes stored
+        in your browser. <span style="color: var(--neon-green)">&#x25A0;</span>
+      </p>
+    </footer>
+
+    <script src="assets/script.js"></script>
+    <script>
+      // SHA-256 helper using WebCrypto
+      async function sha256(text) {
+        const buf = new TextEncoder().encode(text.trim());
+        const hashBuf = await crypto.subtle.digest("SHA-256", buf);
+        return Array.from(new Uint8Array(hashBuf))
+          .map((b) => b.toString(16).padStart(2, "0"))
+          .join("");
+      }
+
+      const form = document.getElementById("submit-form");
+      const input = document.getElementById("flag-input");
+      const msg = document.getElementById("message");
+      const btn = document.getElementById("submit-btn");
+
+      function showMessage(text, type) {
+        msg.textContent = text;
+        msg.className = "message show " + type;
+      }
+
+      function hideMessage() {
+        msg.className = "message";
+      }
+
+      async function handleSubmit() {
+        const val = input.value.trim();
+        if (!val) return;
+
+        hideMessage();
+        btn.disabled = true;
+        btn.textContent = "Verifying...";
+
+        const result = await verifyFlag(val);
+
+        if (!result) {
+          showMessage("✗ Invalid flag. Check the format: flag{...}", "error");
+          btn.disabled = false;
+          btn.textContent = "Verify & capture →";
+          return;
+        }
+
+        const { challenge: ch, hash } = result;
+        const { already } = markSolvedByHash(hash);
+
+        if (already) {
+          showMessage(
+            `◆ Already captured — "${ch.name}" is in your collection.`,
+            "warn",
+          );
+        } else {
+          showMessage(
+            `✓ Flag accepted! "${ch.name}" solved. +${ch.points} points.`,
+            "success",
+          );
+          showToast("Flag captured: " + ch.name, "success");
+        }
+
+        input.value = "";
+        btn.disabled = false;
+        btn.textContent = "Verify & capture →";
+        renderCaptured();
+      }
+
+      form.addEventListener("submit", handleSubmit);
+
+      function renderCaptured() {
+        const progress = getProgress();
+        const wrap = document.getElementById("captured");
+        const list = document.getElementById("flag-list");
+        list.innerHTML = "";
+
+        if (progress.solved.length === 0) {
+          wrap.style.display = "none";
+          return;
+        }
+
+        wrap.style.display = "block";
+
+        // Iterate challenges in order, show only the ones solved.
+        // We display the challenge NAME, not the plaintext flag — the
+        // flag never leaves the user's head (or clipboard).
+        PATHHUNT.challenges.forEach((ch) => {
+          if (progress.solved.includes(ch.hash)) {
+            const el = document.createElement("div");
+            el.className = "flag-item";
+            el.innerHTML = `
+            <span class="check">✓</span>
+            <span style="color: var(--text-dim); font-size: 0.78rem; min-width: 90px;">CH ${String(ch.id).padStart(2, "0")}</span>
+            <span style="flex: 1;">${ch.name}</span>
+            <span style="color: var(--neon-blue); font-size: 0.78rem;">+${ch.points}</span>
+          `;
+            list.appendChild(el);
+          }
+        });
+      }
+
+      renderCaptured();
+    </script>
+  </body>
+</html>

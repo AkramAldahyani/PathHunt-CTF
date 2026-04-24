@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Challenge 02 — CSS Leak — PathHunt CTF</title>
+    <link rel="stylesheet" href="assets/style.css" />
+    <link rel="stylesheet" href="assets/style-secret.css" />
+  </head>
+  <body>
+    <div data-nav></div>
+
+    <main class="container challenge-page">
+      <a href="dashboard.html" class="back-link">← back to dashboard</a>
+
+      <header class="challenge-header">
+        <div class="challenge-num">Challenge 02 · Easy · 100 pts</div>
+        <h1>CSS Leak</h1>
+        <div class="meta">
+          <span>Category: Recon</span>
+          <span>·</span>
+          <span>Technique: Stylesheet inspection</span>
+        </div>
+      </header>
+
+      <div class="challenge-content">
+        <div class="panel secret-panel">
+          <div class="panel-title">Brief</div>
+          <div class="panel-body">
+            <p>
+              <span class="css-hint"
+                >// Not everything visible is in the HTML.</span
+              >
+            </p>
+            <p>
+              Web pages load many files besides the HTML document — stylesheets,
+              scripts, images, fonts. Each of those files is fetched by your
+              browser and sits in the
+              <em>Network</em> tab of DevTools. Developers sometimes leave
+              secrets in CSS comments, mistakenly thinking "nobody looks at
+              stylesheets."
+            </p>
+            <p>
+              This page loaded <em>two</em> stylesheets. One is the main theme.
+              The other holds the clue.
+            </p>
+
+            <div class="hint-box">
+              <strong>Hint</strong>
+              Open DevTools → <em>Network</em> tab → reload the page. Watch for
+              <span class="inline-code">.css</span> files. Click each and read
+              the response. Or open
+              <span class="inline-code">&lt;head&gt;</span> and check every
+              <span class="inline-code">&lt;link rel="stylesheet"&gt;</span>
+              tag.
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">Inspection technique</div>
+          <div class="panel-body">
+            <p>
+              CSS files are plain text. Comments in CSS use
+              <span class="inline-code">/* ... */</span>
+              syntax and are stripped out during rendering — your browser reads
+              them, but they never appear on screen.
+            </p>
+            <p style="margin-top: 12px">
+              <span class="css-indicator">pro-tip</span>
+              &nbsp;Always scan every resource the page pulls in. The flag you
+              need may not live where the page is rendered.
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>Challenge 02 of 10 · PathHunt CTF</p>
+    </footer>
+
+    <script src="assets/script.js"></script>
+  </body>
+</html>

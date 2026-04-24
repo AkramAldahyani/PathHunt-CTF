@@ -1,0 +1,19 @@
+# =====================================================
+# robots.txt — PathHunt CTF
+# =====================================================
+# This file tells search engine crawlers which paths
+# they should NOT index. Hunters use it as a map of
+# what the site admin would rather you didn't see.
+# =====================================================
+
+User-agent: *
+Disallow: /admin-hidden.html
+Disallow: /dev-panel/
+Disallow: /api/
+
+# flag{robots_are_useful}
+# next: /admin-hidden.html
+#
+# Note: robots.txt is a polite request, not a security
+# control. Search engines obey it; attackers read it
+# and visit every listed path.

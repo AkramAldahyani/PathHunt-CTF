@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Challenge 04 — Robots Recon — PathHunt CTF</title>
+    <link rel="stylesheet" href="assets/style.css" />
+  </head>
+  <body>
+    <div data-nav></div>
+
+    <main class="container challenge-page">
+      <a href="dashboard.html" class="back-link">← back to dashboard</a>
+
+      <header class="challenge-header">
+        <div class="challenge-num">Challenge 04 · Medium · 150 pts</div>
+        <h1>Robots Recon</h1>
+        <div class="meta">
+          <span>Category: Recon</span>
+          <span>·</span>
+          <span>Technique: robots.txt inspection</span>
+        </div>
+      </header>
+
+      <div class="challenge-content">
+        <div class="panel">
+          <div class="panel-title">Brief</div>
+          <div class="panel-body">
+            <p>
+              Every well-behaved website can ship a
+              <span class="inline-code">robots.txt</span>
+              file at its root. Its job: tell search-engine crawlers which paths
+              they should
+              <em>not</em> index. It's a gentleman's agreement, not a security
+              control.
+            </p>
+            <p>
+              That makes it a gift for hunters. Admins list the exact paths they
+              don't want indexed — which is a complete roadmap of pages they
+              consider sensitive.
+            </p>
+
+            <div class="hint-box">
+              <strong>Hint</strong>
+              Visit
+              <a href="robots.txt" style="color: var(--neon-purple)"
+                >robots.txt</a
+              >
+              in your browser. Read every line, including the comments.
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">Technique</div>
+          <div class="panel-body">
+            <p>Against real sites, the recon workflow is:</p>
+            <ol
+              style="
+                padding-left: 20px;
+                margin-top: 10px;
+                color: var(--text-dim);
+              "
+            >
+              <li>Visit <span class="inline-code">/robots.txt</span></li>
+              <li>Visit <span class="inline-code">/sitemap.xml</span></li>
+              <li>
+                Visit <span class="inline-code">/.well-known/security.txt</span>
+              </li>
+              <li>
+                Check every <span class="inline-code">Disallow:</span> path
+                manually
+              </li>
+            </ol>
+            <p style="margin-top: 14px">
+              What the site tries to hide from Google is often exactly what you
+              want to see.
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>Challenge 04 of 10 · PathHunt CTF</p>
+    </footer>
+
+    <script src="assets/script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Challenge 08 — Hidden API — PathHunt CTF</title>
+    <link rel="stylesheet" href="assets/style.css" />
+  </head>
+  <body>
+    <div data-nav></div>
+
+    <main class="container challenge-page">
+      <a href="dashboard.html" class="back-link">← back to dashboard</a>
+
+      <header class="challenge-header">
+        <div class="challenge-num">Challenge 08 · Medium · 200 pts</div>
+        <h1>Hidden API</h1>
+        <div class="meta">
+          <span>Category: Network</span>
+          <span>·</span>
+          <span>Technique: Inspect XHR / fetch calls</span>
+        </div>
+      </header>
+
+      <div class="challenge-content">
+        <div class="panel">
+          <div class="panel-title">Brief</div>
+          <div class="panel-body">
+            <p>
+              The page is quiet, but the <em>network</em> is chatty. Modern
+              websites pull data in the background from API endpoints — JSON
+              feeds, config files, analytics pings. Each of those requests is
+              visible in DevTools, and each response is a potential leak.
+            </p>
+            <p>
+              This page is silently calling an internal endpoint right now. Find
+              it, read the response, and you've got the flag.
+            </p>
+
+            <div class="hint-box">
+              <strong>Hint</strong>
+              Open DevTools → <em>Network</em> tab → filter by
+              <em>Fetch/XHR</em> → reload the page. Click the request that isn't
+              a CSS, JS, or HTML file. Check its <em>Response</em> or
+              <em>Preview</em> tab.
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">API response</div>
+          <div class="panel-body">
+            <p style="color: var(--text-dim); font-size: 0.9rem">
+              Fetched from <span class="inline-code">/api/hidden-data</span>:
+            </p>
+            <div class="api-response" id="api-output">Loading...</div>
+            <p
+              style="
+                margin-top: 14px;
+                color: var(--text-muted);
+                font-size: 0.85rem;
+              "
+            >
+              In a real pentest, you'd discover this endpoint by watching the
+              Network panel, or by fuzzing
+              <span class="inline-code">/api/*</span> paths directly.
+            </p>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">Why APIs leak</div>
+          <div class="panel-body">
+            <p>
+              API developers often assume "nobody will call this endpoint
+              directly" — so they skip authentication. The front-end page calls
+              it politely, displays only a slice of the data, and everyone's
+              happy. Until a hunter opens DevTools.
+            </p>
+            <p style="margin-top: 12px">Common real-world findings:</p>
+            <ul
+              style="
+                padding-left: 20px;
+                margin-top: 8px;
+                color: var(--text-dim);
+              "
+            >
+              <li>Full user records returned when the UI only shows a name</li>
+              <li>
+                Debug endpoints like
+                <span class="inline-code">/api/debug/config</span>
+              </li>
+              <li>API keys embedded in client-side JS</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>Challenge 08 of 10 · PathHunt CTF</p>
+    </footer>
+
+    <script src="assets/script.js"></script>
+    <script>
+      // Silently fetch the hidden endpoint so it shows up in the Network tab.
+      // We also render the JSON into the page (with syntax highlight) so the
+      // challenge works even if the user hasn't opened DevTools yet.
+      (async function () {
+        const output = document.getElementById("api-output");
+
+        // Try extensionless first (the "real" endpoint); fall back to .json
+        // so this works on GitHub Pages and strict static hosts.
+        const endpoints = ["api/hidden-data", "api/hidden-data.json"];
+
+        let data = null;
+        let usedUrl = null;
+
+        for (const url of endpoints) {
+          try {
+            const res = await fetch(url, { cache: "no-store" });
+            if (!res.ok) continue;
+            const text = await res.text();
+            data = JSON.parse(text);
+            usedUrl = url;
+            break;
+          } catch (e) {
+            // try next
+          }
+        }
+
+        if (!data) {
+          output.textContent =
+            "⚠ Endpoint unreachable. Open DevTools → Network tab, or fetch /api/hidden-data directly.";
+          return;
+        }
+
+        // Syntax-highlight the JSON response
+        const pretty = JSON.stringify(data, null, 2)
+          .replace(/"([^"]+)":/g, '<span class="json-key">"$1":</span>')
+          .replace(/: "([^"]*)"/g, ': <span class="json-string">"$1"</span>');
+
+        output.innerHTML = pretty;
+      })();
+    </script>
+  </body>
+</html>

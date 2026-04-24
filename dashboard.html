@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard — PathHunt CTF</title>
+    <link rel="stylesheet" href="assets/style.css" />
+  </head>
+  <body>
+    <div data-nav></div>
+
+    <main class="container">
+      <!-- Header -->
+      <section class="dashboard-header">
+        <div class="section-label">Agent dashboard</div>
+        <h1>Mission control</h1>
+        <p>
+          Ten challenges. Every solved flag unlocks the next. Track your
+          progress below.
+        </p>
+      </section>
+
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Flags captured</div>
+          <div class="stat-value">
+            <span class="accent" data-stat-solved>0</span>
+            <span style="color: var(--text-muted); font-size: 1.2rem"
+              >/ 10</span
+            >
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Total score</div>
+          <div class="stat-value green" data-stat-score>0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Current rank</div>
+          <div class="stat-value purple" data-stat-rank>Rookie</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Next challenge</div>
+          <div
+            class="stat-value"
+            style="
+              font-size: 1.05rem;
+              font-family: var(--font-mono);
+              padding-top: 10px;
+            "
+            data-stat-next
+          >
+            Challenge 01
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress bar -->
+      <div class="progress-wrap">
+        <div class="progress-top">
+          <h3>Mission progress</h3>
+          <span class="progress-count"
+            ><span data-progress-count>0</span>%</span
+          >
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" data-progress-fill style="width: 0%"></div>
+        </div>
+      </div>
+
+      <!-- Challenges -->
+      <section style="padding-bottom: 60px">
+        <div class="section-label">Challenges</div>
+        <h2
+          class="section-title"
+          style="font-size: 1.6rem; margin-bottom: 28px"
+        >
+          All objectives
+        </h2>
+        <div class="challenges-grid" data-challenges></div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>
+        PathHunt CTF &middot; Your progress is stored locally in your browser.
+        <span style="color: var(--neon-green)">&#x25A0;</span>
+      </p>
+    </footer>
+
+    <script src="assets/script.js"></script>
+    <script>
+      // Render challenges and stats
+      (function () {
+        const progress = getProgress();
+        const grid = document.querySelector("[data-challenges]");
+        const totalFlags = PATHHUNT.challenges.length;
+        const solvedCount = progress.solved.length;
+        const pct = Math.round((solvedCount / totalFlags) * 100);
+
+        // Stats
+        document.querySelector("[data-stat-solved]").textContent = solvedCount;
+        document.querySelector("[data-stat-score]").textContent =
+          progress.score.toLocaleString();
+        document.querySelector("[data-progress-count]").textContent = pct;
+        document.querySelector("[data-progress-fill]").style.width = pct + "%";
+
+        // Rank
+        let rank = "Rookie";
+        if (solvedCount >= 10) rank = "Legend";
+        else if (solvedCount >= 7) rank = "Hacker";
+        else if (solvedCount >= 4) rank = "Scout";
+        else if (solvedCount >= 1) rank = "Initiate";
+        document.querySelector("[data-stat-rank]").textContent = rank;
+
+        // Next challenge indicator
+        const nextIdx = solvedCount >= totalFlags ? -1 : solvedCount;
+        const nextEl = document.querySelector("[data-stat-next]");
+        if (nextIdx === -1) {
+          nextEl.textContent = "✓ All solved";
+          nextEl.style.color = "var(--neon-green)";
+        } else {
+          const ch = PATHHUNT.challenges[nextIdx];
+          nextEl.textContent = `#${String(ch.id).padStart(2, "0")} — ${ch.name}`;
+        }
+
+        // Render challenge cards
+        PATHHUNT.challenges.forEach((ch, i) => {
+          const isSolved = progress.solved.includes(ch.hash);
+          // Unlocked = all previous challenges solved, OR it's the first, OR user has solved it
+          const prevSolved =
+            i === 0 ||
+            progress.solved.includes(PATHHUNT.challenges[i - 1].hash);
+          const isUnlocked = isSolved || prevSolved;
+
+          let statusLabel = "Locked";
+          let statusClass = "status-locked";
+          if (isSolved) {
+            statusLabel = "Solved";
+            statusClass = "status-solved";
+          } else if (isUnlocked) {
+            statusLabel = "Unlocked";
+            statusClass = "status-unlocked";
+          }
+
+          const cardClass = isSolved ? "solved" : isUnlocked ? "" : "locked";
+
+          // Difficulty dots
+          let dots = "";
+          for (let d = 1; d <= 4; d++) {
+            dots += `<span class="dot ${d <= ch.difficulty ? "filled" : ""}"></span>`;
+          }
+
+          const el = document.createElement(isUnlocked ? "a" : "div");
+          if (isUnlocked) el.href = ch.path;
+          el.className = `challenge-card ${cardClass}`;
+          el.innerHTML = `
+          <div class="challenge-top">
+            <span class="challenge-num">CHALLENGE ${String(ch.id).padStart(2, "0")}</span>
+            <span class="challenge-status ${statusClass}">${statusLabel}</span>
+          </div>
+          <div class="challenge-name">${ch.name}</div>
+          <div class="challenge-desc">${isUnlocked ? ch.desc : "Solve the previous challenge to unlock."}</div>
+          <div class="challenge-footer">
+            <span class="difficulty">
+              <span class="diff-dots">${dots}</span>
+              <span class="diff-label">${["Easy", "Easy", "Medium", "Medium", "Hard", "Hard"][ch.difficulty - 1] || "Medium"}</span>
+            </span>
+            <span class="points">${ch.points} pts</span>
+          </div>
+        `;
+          grid.appendChild(el);
+        });
+      })();
+    </script>
+  </body>
+</html>

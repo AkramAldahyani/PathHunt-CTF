@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Challenge 09 — Client-side Login Bypass — PathHunt CTF</title>
+    <link rel="stylesheet" href="assets/style.css" />
+  </head>
+  <body>
+    <div data-nav></div>
+
+    <main class="container challenge-page">
+      <a href="dashboard.html" class="back-link">← back to dashboard</a>
+
+      <header class="challenge-header">
+        <div class="challenge-num">Challenge 09 · Hard · 250 pts</div>
+        <h1>Client-side Login Bypass</h1>
+        <div class="meta">
+          <span>Category: Auth</span>
+          <span>·</span>
+          <span>Technique: Read the login JavaScript</span>
+        </div>
+      </header>
+
+      <div class="challenge-content">
+        <div class="panel">
+          <div class="panel-title">Brief</div>
+          <div class="panel-body">
+            <p>
+              A lazy developer wrote a "secure" login page — except the whole
+              check runs in the browser. The correct credentials are written
+              right into the JavaScript source. Anyone can read them.
+            </p>
+            <p>
+              This is one of the most famous anti-patterns in web security:
+              <strong style="color: var(--neon-pink)"
+                >client-side authentication</strong
+              >. Authentication must happen on a server you control. Putting it
+              in the browser means the user is also the guard.
+            </p>
+
+            <div class="hint-box">
+              <strong>Hint</strong>
+              View the page source (or open DevTools → <em>Sources</em>) and
+              read the <span class="inline-code">&lt;script&gt;</span> at the
+              bottom. The username/password comparison is right there in plain
+              text.
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">🔐 Login portal</div>
+          <div class="panel-body">
+            <form class="login-form" id="login-form" onsubmit="return false;">
+              <div class="form-group">
+                <label class="form-label" for="username">Username</label>
+                <input
+                  type="text"
+                  id="username"
+                  class="form-input"
+                  placeholder="username"
+                  autocomplete="off"
+                  spellcheck="false"
+                />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="password">Password</label>
+                <input
+                  type="password"
+                  id="password"
+                  class="form-input"
+                  placeholder="password"
+                  autocomplete="off"
+                />
+              </div>
+              <button type="submit" class="btn-submit" id="login-btn">
+                Authenticate &rarr;
+              </button>
+              <div
+                class="message"
+                id="login-msg"
+                role="status"
+                aria-live="polite"
+              ></div>
+            </form>
+
+            <div id="login-reveal" class="flag-reveal">
+              <div class="label">✓ Access granted · flag captured</div>
+              <div class="flag-text">flag{client_side_fail}</div>
+              <div class="next-path">
+                Next path: <a href="final-gate.html">/final-gate.html</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">Real-world takeaway</div>
+          <div class="panel-body">
+            <p>
+              Anything your browser can check, your browser can skip. Password
+              comparisons, role checks, "premium unlocked" flags — if the logic
+              runs on the client, the client controls it. Real auth sends
+              credentials to a server that holds the ground truth in a database
+              the user never sees.
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>Challenge 09 of 10 · PathHunt CTF</p>
+    </footer>
+
+    <script src="assets/script.js"></script>
+    <script>
+      /* =============================================================
+       🔐 Login handler — DO NOT DEPLOY TO PRODUCTION
+       Credentials are checked entirely in the browser.
+       Anyone viewing this source sees the admin password.
+    ============================================================= */
+      (function () {
+        const form = document.getElementById("login-form");
+        const msg = document.getElementById("login-msg");
+        const btn = document.getElementById("login-btn");
+        const reveal = document.getElementById("login-reveal");
+
+        function attemptLogin() {
+          const username = document.getElementById("username").value.trim();
+          const password = document.getElementById("password").value;
+
+          // TODO: move this check to the backend before launch (never did)
+          if (username === "admin" && password === "admin123") {
+            msg.textContent = "✓ Welcome, admin. Flag revealed below.";
+            msg.className = "message show success";
+            reveal.classList.add("show");
+            showToast("Authentication bypassed.", "success");
+          } else if (!username || !password) {
+            msg.textContent = "Please enter both username and password.";
+            msg.className = "message show warn";
+          } else {
+            msg.textContent = "✗ Invalid credentials. Try reading the source.";
+            msg.className = "message show error";
+            reveal.classList.remove("show");
+          }
+        }
+
+        btn.addEventListener("click", attemptLogin);
+        form.addEventListener("submit", attemptLogin);
+      })();
+    </script>
+  </body>
+</html>

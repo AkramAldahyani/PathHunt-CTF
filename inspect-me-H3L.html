@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Challenge 01 — HTML Source — PathHunt CTF</title>
+    <link rel="stylesheet" href="assets/style.css" />
+    <!--
+    ╔═══════════════════════════════════════════════════════════╗
+    ║  AGENT NOTE: You found the source. Good reflex.           ║
+    ║                                                           ║
+    ║  flag{welcome_hunter}                                     ║
+    ║                                                           ║
+    ║  next → hidden-entry-9xA.html                             ║
+    ╚═══════════════════════════════════════════════════════════╝
+  --></head>
+  <body>
+    <div data-nav></div>
+
+    <main class="container challenge-page">
+      <a href="dashboard.html" class="back-link">← back to dashboard</a>
+
+      <header class="challenge-header">
+        <div class="challenge-num">Challenge 01 · Easy · 100 pts</div>
+        <h1>HTML Source</h1>
+        <div class="meta">
+          <span>Category: Recon</span>
+          <span>·</span>
+          <span>Technique: View Source</span>
+        </div>
+      </header>
+
+      <div class="challenge-content">
+        <div class="panel">
+          <div class="panel-title">Brief</div>
+          <div class="panel-body">
+            <p>
+              Welcome, hunter. Every web page hands you its own source code —
+              you just have to ask for it. Developers often leave comments,
+              TODOs, or debugging notes that were meant to be removed before
+              launch. Sometimes they aren't.
+            </p>
+            <p>
+              This page is your training wheel. The flag is somewhere in the
+              HTML source of the very page you're looking at. The trail to the
+              next page is there too.
+            </p>
+
+            <div class="hint-box">
+              <strong>Hint</strong>
+              Right-click anywhere on the page → <em>View Page Source</em> (or
+              press <span class="inline-code">Ctrl+U</span> /
+              <span class="inline-code">⌘+Option+U</span>). HTML comments look
+              like <span class="inline-code">&lt;!-- ... --&gt;</span> and are
+              invisible in the rendered page.
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">What you're looking for</div>
+          <div class="panel-body">
+            <p>Two things on every challenge page:</p>
+            <ol
+              style="
+                padding-left: 20px;
+                margin-top: 10px;
+                color: var(--text-dim);
+              "
+            >
+              <li>
+                A <strong style="color: var(--text)">flag</strong> in the format
+                <span class="inline-code">flag{something}</span> — submit it on
+                the Submit page.
+              </li>
+              <li>
+                A <strong style="color: var(--text)">next path</strong> that
+                tells you which URL to visit for the next challenge.
+              </li>
+            </ol>
+            <p style="margin-top: 14px">
+              When you find the flag, head to
+              <a href="submit.html" style="color: var(--neon-blue)"
+                >/submit.html</a
+              >
+              to capture it.
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>Challenge 01 of 10 · PathHunt CTF</p>
+    </footer>
+
+    <script src="assets/script.js"></script>
+  </body>
+</html>
