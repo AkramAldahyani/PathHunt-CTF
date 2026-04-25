@@ -51,60 +51,32 @@
         </div>
 
         <div class="panel">
-          <div class="panel-title">🍪 Cookie editor</div>
+          <div class="panel-title">Your current cookies</div>
           <div class="panel-body">
-            <p
-              style="
-                font-family: var(--font-mono);
-                font-size: 0.85rem;
-                color: var(--text-muted);
-              "
-            >
-              // example.com · 3 cookies
+            <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 14px">
+              The page has set a <span class="inline-code">role</span> cookie in
+              your browser. Open DevTools to find and change it.
             </p>
 
-            <div class="mock-editor" id="cookie-editor">
-              <div class="cookie-row">
-                <span class="cookie-key">session_id</span>
-                <input type="text" value="a7f3c9e1b0d4" disabled />
-                <span style="color: var(--text-muted); font-size: 0.75rem"
-                  >readonly</span
-                >
-              </div>
-              <div class="cookie-row">
-                <span class="cookie-key">theme</span>
-                <input type="text" value="dark" disabled />
-                <span style="color: var(--text-muted); font-size: 0.75rem"
-                  >readonly</span
-                >
-              </div>
-              <div class="cookie-row">
-                <span class="cookie-key">role</span>
-                <input
-                  type="text"
-                  id="role-input"
-                  value="user"
-                  spellcheck="false"
-                  autocomplete="off"
-                />
-                <button class="btn-small" id="save-btn">Save</button>
-              </div>
-            </div>
+            <div class="code-block">F12 → Application → Cookies → http://localhost:3000
+→ find "role" → double-click the Value → change to "admin" → press Enter</div>
 
             <p
               id="cookie-status"
               style="
-                margin-top: 14px;
+                margin-top: 16px;
                 font-family: var(--font-mono);
                 font-size: 0.85rem;
                 color: var(--text-dim);
               "
             >
               Current role:
-              <span id="current-role" style="color: var(--neon-blue)"
-                >user</span
-              >
+              <span id="current-role" style="color: var(--neon-blue)">user</span>
             </p>
+
+            <button class="btn-small" id="check-btn" style="margin-top: 12px">
+              Check my role
+            </button>
 
             <div id="admin-reveal" class="flag-reveal">
               <div class="label">◆ Privilege escalated · flag captured</div>
@@ -138,33 +110,42 @@
     <script src="assets/script.js"></script>
     <script>
       (function () {
-        const input = document.getElementById("role-input");
-        const saveBtn = document.getElementById("save-btn");
         const current = document.getElementById("current-role");
         const reveal = document.getElementById("admin-reveal");
         const status = document.getElementById("cookie-status");
+        const checkBtn = document.getElementById("check-btn");
 
-        function save() {
-          const val = input.value.trim().toLowerCase();
-          current.textContent = val || "(empty)";
+        function getCookie(name) {
+          const match = document.cookie.match(
+            new RegExp("(?:^|; )" + name + "=([^;]*)")
+          );
+          return match ? decodeURIComponent(match[1]) : null;
+        }
 
-          if (val === "admin") {
+        function checkRole() {
+          const role = getCookie("role") || "user";
+          current.textContent = role;
+
+          if (role === "admin") {
             current.style.color = "var(--neon-green)";
             status.innerHTML =
-              '✓ Role elevated: <span style="color: var(--neon-green);">admin</span> · access granted';
+              '✓ Role elevated: <span style="color:var(--neon-green)">admin</span> · access granted';
             reveal.classList.add("show");
             showToast("Admin access granted. Flag revealed.", "success");
           } else {
             current.style.color = "var(--neon-blue)";
-            status.innerHTML = `Current role: <span style="color: var(--neon-blue);">${val || "(empty)"}</span>`;
+            status.innerHTML = `Current role: <span style="color:var(--neon-blue)">${role}</span>`;
             reveal.classList.remove("show");
           }
         }
 
-        saveBtn.addEventListener("click", save);
-        input.addEventListener("keydown", (e) => {
-          if (e.key === "Enter") save();
-        });
+        // Set the cookie to "user" only if not already tampered with
+        if (!getCookie("role")) {
+          document.cookie = "role=user; path=/";
+        }
+
+        checkRole();
+        checkBtn.addEventListener("click", checkRole);
       })();
     </script>
   </body>
