@@ -3,8 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Challenge 10 — Final Decode — PathHunt CTF</title>
+    <title>Challenge 10 — Fragment Reassembly — PathHunt CTF</title>
     <link rel="stylesheet" href="assets/style.css" />
+    <meta name="x-frag-1" content="flag{" />
+    <style>
+      /* challenge-specific overrides */
+      /* [frag-4] lete */
+    </style>
   </head>
   <body>
     <div data-nav></div>
@@ -16,82 +21,72 @@
         <div class="challenge-num" style="color: var(--neon-green)">
           Challenge 10 · Final · 300 pts
         </div>
-        <h1>Final Decode</h1>
+        <h1>Fragment Reassembly</h1>
         <div class="meta">
-          <span>Category: Decoding</span>
+          <span>Category: Reconnaissance</span>
           <span>·</span>
-          <span>Technique: atob() + console work</span>
+          <span>Technique: DOM, attributes, comments, styles, console</span>
         </div>
       </header>
+
+      <!-- [frag-3] comp -->
 
       <div class="challenge-content">
         <div class="panel">
           <div class="panel-title">Brief</div>
           <div class="panel-body">
             <p>
-              You've made it to the last gate, hunter. One more decode stands
-              between you and the victory flag. Everything you've learned —
-              reading source, using the console, decoding Base64 — comes
-              together here.
+              The flag has been <strong>shattered into 6 fragments</strong> and
+              scattered across every layer of this page — meta tags, element
+              attributes, HTML comments, stylesheets, and inline JavaScript.
             </p>
-            <p>
-              There are <strong>two</strong> encoded payloads in the script at
-              the bottom of this page:
-            </p>
-            <ul
-              style="
-                padding-left: 20px;
-                margin-top: 10px;
-                color: var(--text-dim);
-              "
-            >
-              <li>
-                <strong style="color: var(--text)">final</strong> — a single
-                Base64 string. The easy path.
-              </li>
-              <li>
-                <strong style="color: var(--text)">vault</strong> — Base64 over
-                XOR with a key. The hard path, same flag.
-              </li>
-            </ul>
             <p style="margin-top: 12px">
-              Either one lands you the flag. Pick the one you feel like solving.
+              Each fragment is labeled with its number in the format
+              <span class="inline-code">frag-N</span>. That ordering is the
+              only help you get. Find all six, assemble them in order, and
+              submit the result.
+            </p>
+            <p style="margin-top: 12px">
+              No console snippets this time. You know the tools. Hunt.
             </p>
 
             <div class="hint-box">
-              <strong>Easy path</strong>
-              In the console: <span class="inline-code">atob(final)</span>
-            </div>
-
-            <div
-              class="hint-box"
-              style="
-                background: rgba(255, 184, 77, 0.06);
-                border-color: rgba(255, 184, 77, 0.2);
-              "
-            >
-              <strong style="color: var(--neon-amber)"
-                >Hard path (optional)</strong
+              <strong>Where to look</strong>
+              <code
+                style="
+                  display: block;
+                  margin-top: 8px;
+                  color: var(--text-dim);
+                  font-size: 0.85rem;
+                  line-height: 1.8;
+                "
               >
-              Base64-decode <span class="inline-code">vault</span>, then XOR
-              each byte with the repeating key
-              <span class="inline-code">"pathhunt"</span>. The snippet is
-              provided in the console hints below.
+                &lt;head&gt; meta tags &nbsp;·&nbsp; element attributes<br />
+                HTML comments &nbsp;·&nbsp; &lt;style&gt; blocks<br />
+                title attributes &nbsp;·&nbsp; inline &lt;script&gt;
+              </code>
             </div>
           </div>
         </div>
 
+        <span data-frag-2="you_" aria-hidden="true" style="display: none"></span>
+        <abbr
+          id="frag-5"
+          title="ti_d"
+          data-hint="reversed"
+          style="display: none"
+        ></abbr>
+
         <div class="panel">
-          <div class="panel-title">Console snippets</div>
+          <div class="panel-title">Toolkit reminder</div>
           <div class="panel-body">
             <p style="color: var(--text-dim); font-size: 0.9rem">
-              Paste any of these into DevTools → Console:
+              Every tool you need is already in your browser:
             </p>
             <div class="code-block">
-              // Easy — one line atob(final) // Hard — XOR with key "pathhunt"
-              [...atob(vault)].map((c, i) =&gt;
-              String.fromCharCode(c.charCodeAt(0) ^ "pathhunt".charCodeAt(i %
-              8)) ).join('')
+F12 → Elements      inspect every tag, attribute, and data value
+F12 → Console       run JS, query the DOM, inspect window.*
+Ctrl+U / ⌘+U       view raw page source — see what the renderer hides
             </div>
           </div>
         </div>
@@ -155,19 +150,15 @@
     <script src="assets/script.js"></script>
     <script>
       /* =============================================================
-       🎯 Final Challenge Payloads
-       Two encoded forms of the same flag. Either decodes.
-    ============================================================= */
-
-      // Easy path — straight Base64
-      let final = "ZmxhZ3t5b3VfY29tcGxldGVkX2l0fQ==";
-
-      // Hard path — Base64 over (XOR with repeating key "pathhunt")
-      let vault = "Fg0VDxMMAQEvAhsFGBkLABUFKwEcCA==";
-
-      // Quick verification:
-      //   atob(final)
-      //   [...atob(vault)].map((c,i)=>String.fromCharCode(c.charCodeAt(0)^"pathhunt".charCodeAt(i%8))).join('')
+         Fragment Reassembly — six pieces, six hiding spots.
+         frag-1: somewhere in <head>
+         frag-2: a hidden attribute in the body
+         frag-3: not visible on the page at all
+         frag-4: in the styles
+         frag-5: in an element attribute — but read the hint
+         frag-6: right here. what does this evaluate to?
+      ============================================================= */
+      window.__frag6 = String.fromCharCode(125);
     </script>
   </body>
 </html>

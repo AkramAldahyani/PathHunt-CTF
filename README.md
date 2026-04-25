@@ -19,7 +19,7 @@ PathHunt CTF is a beginner-friendly, self-contained web scavenger hunt. Ten stat
 | 07  | Cookie Tampering         | Modifying cookies to escalate privilege |
 | 08  | Hidden API               | Watching the Network tab for XHR calls  |
 | 09  | Client-side Login Bypass | Reading auth logic in JS                |
-| 10  | Final Decode             | Base64 + optional XOR decode            |
+| 10  | Fragment Reassembly      | DOM recon across meta, attributes, comments, CSS, and JS |
 
 Each challenge hides two things: **a flag** (`flag{...}`) to submit, and **a path** to the next challenge.
 
