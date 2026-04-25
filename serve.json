@@ -1,5 +1,6 @@
 {
   "cleanUrls": false,
+  "directoryListing": false,
   "headers": [
     {
       "source": "/header-secret.html",
