@@ -41,6 +41,12 @@
           ></div>
         </form>
 
+        <div class="score-bar" id="score-bar" style="display:none; margin-top: 28px; padding: 16px 20px; border: 1px solid rgba(255,255,255,0.07); font-family: var(--font-mono); font-size: 0.85rem; display: flex; gap: 32px; flex-wrap: wrap;">
+          <span style="color: var(--text-dim)">Flags &nbsp;<strong id="sb-solved" style="color:var(--text)">0</strong> / 10</span>
+          <span style="color: var(--text-dim)">Score &nbsp;<strong id="sb-score" style="color:var(--neon-green)">0</strong> pts</span>
+          <span style="color: var(--text-dim)">Rank &nbsp;&nbsp;<strong id="sb-rank" style="color:var(--neon-blue)">Rookie</strong></span>
+        </div>
+
         <div class="captured" id="captured" style="display: none">
           <h3>Your captured flags</h3>
           <div class="flag-list" id="flag-list"></div>
@@ -57,27 +63,64 @@
 
     <script src="assets/script.js"></script>
     <script>
-      // SHA-256 helper using WebCrypto
-      async function sha256(text) {
-        const buf = new TextEncoder().encode(text.trim());
-        const hashBuf = await crypto.subtle.digest("SHA-256", buf);
-        return Array.from(new Uint8Array(hashBuf))
-          .map((b) => b.toString(16).padStart(2, "0"))
-          .join("");
-      }
-
-      const form = document.getElementById("submit-form");
+      const form  = document.getElementById("submit-form");
       const input = document.getElementById("flag-input");
-      const msg = document.getElementById("message");
-      const btn = document.getElementById("submit-btn");
+      const msg   = document.getElementById("message");
+      const btn   = document.getElementById("submit-btn");
 
       function showMessage(text, type) {
         msg.textContent = text;
         msg.className = "message show " + type;
       }
 
-      function hideMessage() {
-        msg.className = "message";
+      function hideMessage() { msg.className = "message"; }
+
+      function getRank(n) {
+        if (n >= 10) return "Legend";
+        if (n >= 7)  return "Hacker";
+        if (n >= 4)  return "Scout";
+        if (n >= 1)  return "Initiate";
+        return "Rookie";
+      }
+
+      function renderAll() {
+        const progress   = getProgress();
+        const solvedCount = progress.solved.length;
+        const total      = PATHHUNT.challenges.length;
+
+        // Score bar
+        const bar = document.getElementById("score-bar");
+        bar.style.display = "flex";
+        document.getElementById("sb-solved").textContent = solvedCount;
+        document.getElementById("sb-score").textContent  = progress.score.toLocaleString();
+        document.getElementById("sb-rank").textContent   = getRank(solvedCount);
+
+        // Captured flags list
+        const wrap = document.getElementById("captured");
+        const list = document.getElementById("flag-list");
+        list.innerHTML = "";
+
+        if (solvedCount === 0) { wrap.style.display = "none"; return; }
+        wrap.style.display = "block";
+
+        PATHHUNT.challenges.forEach((ch) => {
+          if (!progress.solved.includes(ch.hash)) return;
+          const el = document.createElement("div");
+          el.className = "flag-item";
+          el.innerHTML = `
+            <span class="check">✓</span>
+            <span style="color:var(--text-dim);font-size:0.78rem;min-width:90px;">CH ${String(ch.id).padStart(2,"0")}</span>
+            <span style="flex:1">${ch.name}</span>
+            <span style="color:var(--neon-blue);font-size:0.78rem;">+${ch.points}</span>
+          `;
+          list.appendChild(el);
+        });
+
+        // Completion screen on final flag submission
+        if (solvedCount === total && !localStorage.getItem('pathhunt_completed')) {
+          localStorage.setItem('pathhunt_completed', '1');
+          setTimeout(() => showCompletionScreen(progress.score), 800);
+        }
       }
 
       async function handleSubmit() {
@@ -101,58 +144,20 @@
         const { already } = markSolvedByHash(hash);
 
         if (already) {
-          showMessage(
-            `◆ Already captured — "${ch.name}" is in your collection.`,
-            "warn",
-          );
+          showMessage(`◆ Already captured — "${ch.name}" is in your collection.`, "warn");
         } else {
-          showMessage(
-            `✓ Flag accepted! "${ch.name}" solved. +${ch.points} points.`,
-            "success",
-          );
+          showMessage(`✓ Flag accepted! "${ch.name}" solved. +${ch.points} points.`, "success");
           showToast("Flag captured: " + ch.name, "success");
         }
 
         input.value = "";
         btn.disabled = false;
         btn.textContent = "Verify & capture →";
-        renderCaptured();
+        renderAll();
       }
 
       form.addEventListener("submit", handleSubmit);
-
-      function renderCaptured() {
-        const progress = getProgress();
-        const wrap = document.getElementById("captured");
-        const list = document.getElementById("flag-list");
-        list.innerHTML = "";
-
-        if (progress.solved.length === 0) {
-          wrap.style.display = "none";
-          return;
-        }
-
-        wrap.style.display = "block";
-
-        // Iterate challenges in order, show only the ones solved.
-        // We display the challenge NAME, not the plaintext flag — the
-        // flag never leaves the user's head (or clipboard).
-        PATHHUNT.challenges.forEach((ch) => {
-          if (progress.solved.includes(ch.hash)) {
-            const el = document.createElement("div");
-            el.className = "flag-item";
-            el.innerHTML = `
-            <span class="check">✓</span>
-            <span style="color: var(--text-dim); font-size: 0.78rem; min-width: 90px;">CH ${String(ch.id).padStart(2, "0")}</span>
-            <span style="flex: 1;">${ch.name}</span>
-            <span style="color: var(--neon-blue); font-size: 0.78rem;">+${ch.points}</span>
-          `;
-            list.appendChild(el);
-          }
-        });
-      }
-
-      renderCaptured();
+      renderAll();
     </script>
   </body>
 </html>

@@ -124,6 +124,12 @@
           nextEl.textContent = `#${String(ch.id).padStart(2, "0")} — ${ch.name}`;
         }
 
+        // Fire completion screen once when all flags are captured
+        if (solvedCount === totalFlags && !localStorage.getItem('pathhunt_completed')) {
+          localStorage.setItem('pathhunt_completed', '1');
+          setTimeout(() => showCompletionScreen(progress.score), 600);
+        }
+
         // Render challenge cards
         PATHHUNT.challenges.forEach((ch, i) => {
           const isSolved = progress.solved.includes(ch.hash);

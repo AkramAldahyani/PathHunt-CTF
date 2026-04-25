@@ -165,8 +165,137 @@ function isChallengeSolved(challenge) {
 function resetProgress() {
   if (!confirm('Reset all progress? This clears solved flags and your score.')) return;
   localStorage.removeItem(PATHHUNT.STORAGE_KEY);
+  localStorage.removeItem('pathhunt_completed');
   showToast('Progress reset. Good hunting, agent.', 'success');
   setTimeout(() => window.location.reload(), 600);
+}
+
+/* ------------------------------------------------
+   Completion screen (Matrix rain + mission debrief)
+   Shown once on the dashboard when all flags are captured.
+------------------------------------------------ */
+function showCompletionScreen(score) {
+  const style = document.createElement('style');
+  style.textContent = `
+    #ph-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      display: flex; align-items: center; justify-content: center;
+    }
+    #ph-canvas { position: absolute; inset: 0; }
+    #ph-panel {
+      position: relative;
+      background: rgba(5, 8, 15, 0.93);
+      border: 1px solid var(--neon-green);
+      box-shadow: 0 0 60px rgba(0,255,163,0.25), inset 0 0 60px rgba(0,255,163,0.03);
+      padding: 48px 56px;
+      max-width: 500px;
+      width: 90%;
+      font-family: var(--font-mono);
+    }
+    #ph-panel h2 {
+      color: var(--neon-green);
+      font-size: 1.4rem;
+      margin: 0 0 6px;
+      letter-spacing: 0.08em;
+    }
+    #ph-divider {
+      border: none; border-top: 1px solid rgba(0,255,163,0.2);
+      margin: 20px 0;
+    }
+    .ph-row {
+      display: flex; justify-content: space-between;
+      font-size: 0.88rem; padding: 4px 0;
+      color: var(--text-dim);
+    }
+    .ph-row span { color: var(--text); }
+    .ph-row .green { color: var(--neon-green); }
+    #ph-msg {
+      margin-top: 24px; font-size: 0.88rem;
+      color: var(--text); line-height: 1.7;
+    }
+    #ph-close {
+      display: block; width: 100%; margin-top: 32px;
+      background: transparent;
+      border: 1px solid var(--neon-green);
+      color: var(--neon-green);
+      font-family: var(--font-mono); font-size: 0.85rem;
+      padding: 12px; cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    #ph-close:hover {
+      background: rgba(0,255,163,0.08);
+      box-shadow: 0 0 16px rgba(0,255,163,0.2);
+    }
+    #ph-cursor {
+      display: inline-block; width: 9px; height: 0.95em;
+      background: var(--neon-green); vertical-align: middle;
+      animation: cur-blink 1s step-end infinite;
+    }
+    @keyframes cur-blink { 50% { opacity: 0; } }
+  `;
+  document.head.appendChild(style);
+
+  const overlay = document.createElement('div');
+  overlay.id = 'ph-overlay';
+
+  const canvas = document.createElement('canvas');
+  canvas.id = 'ph-canvas';
+  overlay.appendChild(canvas);
+
+  const panel = document.createElement('div');
+  panel.id = 'ph-panel';
+  panel.innerHTML = `
+    <h2>&gt;_ MISSION COMPLETE <span id="ph-cursor"></span></h2>
+    <hr id="ph-divider">
+    <div class="ph-row">Flags captured <span>10 / 10</span></div>
+    <div class="ph-row">Total score <span>${score.toLocaleString()} pts</span></div>
+    <div class="ph-row">Final rank <span class="green">Legend</span></div>
+    <p id="ph-msg">
+      All 10 flags captured. Every layer of the stack — source, headers,
+      cookies, APIs, auth logic — you read them all.<br><br>
+      Good hunting, agent. ◼
+    </p>
+    <button id="ph-close">[ close terminal ]</button>
+  `;
+  overlay.appendChild(panel);
+  document.body.appendChild(overlay);
+
+  // Matrix rain
+  const ctx = canvas.getContext('2d');
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノ0123456789ABCDEF><{}[]';
+  const fs = 13;
+  let drops = Array(Math.ceil(window.innerWidth / fs)).fill(0);
+
+  const rain = setInterval(() => {
+    ctx.fillStyle = 'rgba(5, 8, 15, 0.06)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.font = fs + 'px monospace';
+    drops = Array(Math.ceil(canvas.width / fs)).fill(0).map((_, i) => drops[i] || 0);
+    drops.forEach((y, i) => {
+      ctx.fillStyle = i % 5 === 0 ? '#ffffff' : '#00ffa3';
+      ctx.globalAlpha = i % 5 === 0 ? 0.9 : 0.6;
+      ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * fs, y * fs);
+      ctx.globalAlpha = 1;
+      drops[i] = y * fs > canvas.height && Math.random() > 0.975 ? 0 : y + 1;
+    });
+  }, 45);
+
+  function close() {
+    clearInterval(rain);
+    window.removeEventListener('resize', resize);
+    overlay.remove();
+    style.remove();
+  }
+
+  document.getElementById('ph-close').addEventListener('click', close);
+  overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
 }
 
 /* ------------------------------------------------
