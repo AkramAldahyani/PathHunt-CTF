@@ -29,19 +29,16 @@ Each challenge hides two things: **a flag** (`flag{...}`) to submit, and **a pat
 
 ### Option 1 — Open locally
 
-````bash
-git clone https://github.com/AkramAldahyani/PathHunt-CTF.git
-cd pathhunt-ctf
-
 ```bash
-# Python 3
-python3 -m http.server 8000
+git clone https://github.com/AkramAldahyani/PathHunt-CTF.git
+cd PathHunt-CTF
+npm start
+```
 
-# Node.js (if you have npx)
-npx serve .
+> **⚠️ Use `npm start` (which runs `npx serve .`) — do not use Python's `http.server`, VS Code Live Server, or any other static server.**
+> Some challenges rely on custom HTTP response headers configured in `serve.json`. Other servers ignore this file and will cause those challenges to behave incorrectly (e.g. `curl -I` won't return the expected headers).
 
-# Then visit http://localhost:8000
-````
+Then open **http://localhost:3000** in your browser.
 
 ---
 

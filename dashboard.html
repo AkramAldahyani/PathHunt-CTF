@@ -151,12 +151,19 @@
             dots += `<span class="dot ${d <= ch.difficulty ? "filled" : ""}"></span>`;
           }
 
+          const isFinal = i === PATHHUNT.challenges.length - 1;
+          const diffLabel = ["Easy", "Easy", "Medium", "Hard"][ch.difficulty - 1] || "Medium";
+          const numLabel = isFinal
+            ? `CHALLENGE ${String(ch.id).padStart(2, "0")} &middot; FINAL`
+            : `CHALLENGE ${String(ch.id).padStart(2, "0")}`;
+
           const el = document.createElement(isUnlocked ? "a" : "div");
           if (isUnlocked) el.href = ch.path;
           el.className = `challenge-card ${cardClass}`;
+          if (isFinal) el.style.borderColor = "rgba(0, 255, 163, 0.3)";
           el.innerHTML = `
           <div class="challenge-top">
-            <span class="challenge-num">CHALLENGE ${String(ch.id).padStart(2, "0")}</span>
+            <span class="challenge-num" ${isFinal ? 'style="color: var(--neon-green)"' : ""}>${numLabel}</span>
             <span class="challenge-status ${statusClass}">${statusLabel}</span>
           </div>
           <div class="challenge-name">${ch.name}</div>
@@ -164,7 +171,7 @@
           <div class="challenge-footer">
             <span class="difficulty">
               <span class="diff-dots">${dots}</span>
-              <span class="diff-label">${["Easy", "Easy", "Medium", "Medium", "Hard", "Hard"][ch.difficulty - 1] || "Medium"}</span>
+              <span class="diff-label">${diffLabel}</span>
             </span>
             <span class="points">${ch.points} pts</span>
           </div>

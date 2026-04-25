@@ -9,6 +9,28 @@
    too, so nothing in localStorage leaks a flag.
    ============================================ */
 
+/* Resolve the project root once, so nav links work from any depth
+   (e.g. /dev-panel/index.html → /dashboard.html, not /dev-panel/dashboard.html).
+   - On a server (http/https): use a root-relative "/" prefix.
+   - On file:// : derive an absolute file URL from this script's own src,
+     since "/" would resolve to the OS filesystem root. */
+const _base = (() => {
+  if (window.location.protocol !== 'file:') {
+    return '/';
+  }
+  const cur = document.currentScript ||
+    Array.from(document.getElementsByTagName('script'))
+      .find(s => s.src && /assets\/script\.js/.test(s.src));
+  if (cur && cur.src) {
+    return cur.src.replace(/assets\/script\.js(\?.*)?(#.*)?$/, '');
+  }
+  return '';
+})();
+
+// Debug marker — open DevTools → Console. If you don't see this line on
+// /dev-panel/, the browser is serving a cached copy of the old script.js.
+console.info('[PathHunt] script.js loaded. _base =', JSON.stringify(_base));
+
 const PATHHUNT = {
   challenges: [
     {
@@ -66,9 +88,9 @@ const PATHHUNT = {
       hash: 'b67ccc7a536c1c3d636d581fa5b666e40ada7d18ce65b5f2c66adeee88dd0420'
     },
     {
-      id: 10, slug: 'final-gate', name: 'Final Decode',
+      id: 10, slug: 'final-gate', name: 'Fragment Reassembly',
       difficulty: 4, points: 300, path: 'final-gate.html',
-      desc: 'One last decode stands between you and glory. Finish strong, hunter.',
+      desc: 'The flag has been shattered across every layer of the page. Hunt every fragment, assemble the truth.',
       hash: '3b44afe5dac472c10081a2e507640ac454ed181feb8c337b9f18823b1d70ffd2'
     }
   ],
@@ -177,13 +199,13 @@ function renderNav() {
   host.innerHTML = `
     <nav class="nav">
       <div class="nav-inner">
-        <a href="index.html" class="logo">
+        <a href="${_base}index.html" class="logo">
           <span class="logo-mark">&gt;_</span>
           <span class="logo-text">PathHunt<span class="accent">_</span>CTF</span>
         </a>
         <ul class="nav-links">
-          <li><a href="dashboard.html" class="${activeDash}">Dashboard</a></li>
-          <li><a href="submit.html" class="${activeSubmit}">Submit Flag</a></li>
+          <li><a href="${_base}dashboard.html" class="${activeDash}">Dashboard</a></li>
+          <li><a href="${_base}submit.html" class="${activeSubmit}">Submit Flag</a></li>
           <li><button class="btn-reset" onclick="resetProgress()">Reset</button></li>
         </ul>
       </div>

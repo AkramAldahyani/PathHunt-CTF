@@ -1,0 +1,12 @@
+{
+  "cleanUrls": false,
+  "headers": [
+    {
+      "source": "/header-secret.html",
+      "headers": [
+        { "key": "X-Flag", "value": "flag{header_hunter}" },
+        { "key": "X-Next", "value": "/cookie-room.html" }
+      ]
+    }
+  ]
+}
