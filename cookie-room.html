@@ -42,10 +42,11 @@
 
             <div class="hint-box">
               <strong>Hint</strong>
-              The mock cookie editor below mimics what DevTools →
-              <em>Application</em> → <em>Cookies</em> looks like. Your current
-              role is <span class="inline-code">user</span>. Change it to
-              <span class="inline-code">admin</span> and save.
+              The page sets a cookie that holds the answer to "who are you?"
+              — and then asks the browser the same question back. Whatever
+              the cookie says is taken as truth. The browser is yours;
+              the cookie store is yours. Pick a value the page would
+              consider privileged.
             </div>
           </div>
         </div>
@@ -54,12 +55,9 @@
           <div class="panel-title">Your current cookies</div>
           <div class="panel-body">
             <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 14px">
-              The page has set a <span class="inline-code">role</span> cookie in
-              your browser. Open DevTools to find and change it.
+              The page has set a cookie in your browser that decides what
+              you're allowed to see. Find it. Change it. Re-check.
             </p>
-
-            <div class="code-block">F12 → Application → Cookies → http://localhost:3000
-→ find "role" → double-click the Value → change to "admin" → press Enter</div>
 
             <p
               id="cookie-status"

@@ -42,11 +42,11 @@
 
             <div class="hint-box">
               <strong>Hint</strong>
-              Visit
-              <a href="robots.txt" style="color: var(--neon-purple)"
-                >robots.txt</a
-              >
-              in your browser. Read every line, including the comments.
+              The file in question is plain text and lives at a well-known,
+              fixed location every site agrees on. No page links to it —
+              you're expected to know the name and type it in. Once you're
+              there, every line matters. Even the ones that look like
+              decoration.
             </div>
           </div>
         </div>
@@ -54,24 +54,13 @@
         <div class="panel">
           <div class="panel-title">Technique</div>
           <div class="panel-body">
-            <p>Against real sites, the recon workflow is:</p>
-            <ol
-              style="
-                padding-left: 20px;
-                margin-top: 10px;
-                color: var(--text-dim);
-              "
-            >
-              <li>Visit <span class="inline-code">/robots.txt</span></li>
-              <li>Visit <span class="inline-code">/sitemap.xml</span></li>
-              <li>
-                Visit <span class="inline-code">/.well-known/security.txt</span>
-              </li>
-              <li>
-                Check every <span class="inline-code">Disallow:</span> path
-                manually
-              </li>
-            </ol>
+            <p>
+              Real recon is just a list of well-known paths typed into the
+              address bar one after another. Sitemaps, crawler hints,
+              security disclosures, build manifests — they all live at
+              predictable locations. None of them are linked from the homepage.
+              All of them are public if you ask.
+            </p>
             <p style="margin-top: 14px">
               What the site tries to hide from Google is often exactly what you
               want to see.

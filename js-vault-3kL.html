@@ -41,25 +41,28 @@
 
             <div class="hint-box">
               <strong>Hint</strong>
-              In the browser console,
-              <span class="inline-code">atob('...')</span> decodes a Base64
-              string. <span class="inline-code">btoa('...')</span> encodes one.
-              Paste each variable and run it.
+              The script on this page declares variables that look like
+              gibberish but follow a familiar alphabet — letters, digits, a
+              few symbols, the trailing equals sign. The browser already ships
+              with a function that will turn that gibberish back into text.
+              Find it in the console docs.
             </div>
           </div>
         </div>
 
         <div class="panel">
-          <div class="panel-title">Console walkthrough</div>
+          <div class="panel-title">What the script holds</div>
           <div class="panel-body">
-            <p>Open DevTools (F12) → <em>Console</em> tab. Type:</p>
-            <div class="code-block">
-              atob('ZmxhZ3tkZWNvZGVfbWV9') atob('L3JvYm90LXpvbmUuaHRtbA==')
-            </div>
-            <p style="margin-top: 14px">
-              Each <span class="inline-code">atob</span> call returns the
-              decoded string. One is your flag, the other is the path to
-              Challenge 04.
+            <p>
+              Two declarations sit at the bottom of this document. Their
+              values are strings — not random strings, but the kind a printable
+              encoding produces. Both decode cleanly. One is the flag; the
+              other is the next path. Which is which is up to you to read.
+            </p>
+            <p style="margin-top: 14px; color: var(--text-muted); font-size: 0.85rem">
+              The encoding is one of the oldest in the web stack. It has been
+              sitting in <span class="inline-code">window</span> since
+              browsers existed.
             </p>
           </div>
         </div>

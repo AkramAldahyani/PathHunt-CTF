@@ -51,20 +51,14 @@
             </p>
 
             <div class="hint-box">
-              <strong>Where to look</strong>
-              <code
-                style="
-                  display: block;
-                  margin-top: 8px;
-                  color: var(--text-dim);
-                  font-size: 0.85rem;
-                  line-height: 1.8;
-                "
-              >
-                &lt;head&gt; meta tags &nbsp;·&nbsp; element attributes<br />
-                HTML comments &nbsp;·&nbsp; &lt;style&gt; blocks<br />
-                title attributes &nbsp;·&nbsp; inline &lt;script&gt;
-              </code>
+              <strong>Hint</strong>
+              You have walked through every layer of a web page across nine
+              challenges. Every one of those layers is in play here. Some
+              fragments are written normally; others wear a disguise that a
+              previous challenge already taught you to see through. The
+              labels are <span class="inline-code">frag-1</span> through
+              <span class="inline-code">frag-6</span> — that is the order.
+              The locations are yours to find.
             </div>
           </div>
         </div>
@@ -149,15 +143,7 @@ Ctrl+U / ⌘+U       view raw page source — see what the renderer hides
 
     <script src="assets/script.js"></script>
     <script>
-      /* =============================================================
-         Fragment Reassembly — six pieces, six hiding spots.
-         frag-1: somewhere in <head>
-         frag-2: a hidden attribute in the body
-         frag-3: not visible on the page at all
-         frag-4: in the styles
-         frag-5: in an element attribute — but read the hint
-         frag-6: right here. what does this evaluate to?
-      ============================================================= */
+      /* Fragment Reassembly — six pieces. The labels are your only map. */
       window.__frag6 = String.fromCharCode(125);
     </script>
   </body>

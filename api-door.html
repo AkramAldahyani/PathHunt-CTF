@@ -39,32 +39,25 @@
 
             <div class="hint-box">
               <strong>Hint</strong>
-              Open DevTools → <em>Network</em> tab → filter by
-              <em>Fetch/XHR</em> → reload the page. Click the request that isn't
-              a CSS, JS, or HTML file. Check its <em>Response</em> or
-              <em>Preview</em> tab.
+              The HTML on this page is short. The script attached to it is
+              not. Something gets fetched in the background the moment the
+              document loads — the kind of request that doesn't show up in
+              the URL bar. Find the conversation the page is having behind
+              your back, and read the reply.
             </div>
           </div>
         </div>
 
         <div class="panel">
-          <div class="panel-title">API response</div>
+          <div class="panel-title">Response from somewhere</div>
           <div class="panel-body">
             <p style="color: var(--text-dim); font-size: 0.9rem">
-              Fetched from <span class="inline-code">/api/hidden-data</span>:
+              The page rendered the result below, but the URL it came from
+              is nowhere on screen. The flag is in the response — but the
+              real lesson is finding the request that produced it. On a
+              real target, that endpoint is the prize, not the page.
             </p>
             <div class="api-response" id="api-output">Loading...</div>
-            <p
-              style="
-                margin-top: 14px;
-                color: var(--text-muted);
-                font-size: 0.85rem;
-              "
-            >
-              In a real pentest, you'd discover this endpoint by watching the
-              Network panel, or by fuzzing
-              <span class="inline-code">/api/*</span> paths directly.
-            </p>
           </div>
         </div>
 

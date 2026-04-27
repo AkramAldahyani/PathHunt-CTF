@@ -37,23 +37,19 @@
               <strong style="color: var(--neon-amber)"
                 >directory fuzzing</strong
               >
-              — you try common names (<span class="inline-code">/admin</span>,
-              <span class="inline-code">/backup</span>,
-              <span class="inline-code">/dev</span>,
-              <span class="inline-code">/test</span>,
-              <span class="inline-code">/old</span>,
-              <span class="inline-code">/dev-panel</span>, etc.) and see what
-              responds with 200 OK instead of 404.
+              — you try a wordlist of common names against the server and
+              watch which ones answer with content instead of a 404. Build,
+              backup, staging, internal tools — admins reach for the same
+              handful of folder names every time.
             </p>
 
             <div class="hint-box">
               <strong>Hint</strong>
-              A developer panel was left on this deployment. Try paths like
-              <span class="inline-code">/dev/</span>,
-              <span class="inline-code">/dev-panel/</span>,
-              <span class="inline-code">/admin/</span>,
-              <span class="inline-code">/panel/</span>. One of them actually
-              exists.
+              You may already have seen a clue to this folder's name on a
+              previous page — admins like to list what they want hidden in
+              one convenient file. Think about what an internal team would
+              call a folder that nobody outside engineering should reach.
+              Compose a few candidates by hand — the URL bar is your fuzzer.
             </div>
           </div>
         </div>
@@ -82,7 +78,9 @@
                 font-size: 0.88rem;
               "
             >
-              Look for a <em>developer panel</em>.
+              The folder you want serves an
+              <span class="inline-code">index.html</span> — so once you guess
+              right, you'll know.
             </p>
           </div>
         </div>
