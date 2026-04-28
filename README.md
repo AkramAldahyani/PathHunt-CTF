@@ -47,12 +47,8 @@ Then open **http://localhost:3000** in your browser.
 <strong>Welcome page</strong><br>
 <img src="assets/screenshots/welcome-page-screenshot.png" width="1050">
 
-<br><br>
-
 <strong>Dashboard</strong><br>
 <img src="assets/screenshots/dashbaord-page-screenshot.png" width="1050">
-
-<br><br>
 
 <strong>Submit flags</strong><br>
 <img src="assets/screenshots/submit-page-screenshot.png" width="1050">
