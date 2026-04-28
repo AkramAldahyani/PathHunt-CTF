@@ -68,12 +68,20 @@
       const msg   = document.getElementById("message");
       const btn   = document.getElementById("submit-btn");
 
+      let messageTimeout;
+
       function showMessage(text, type) {
         msg.textContent = text;
         msg.className = "message show " + type;
+
+        clearTimeout(messageTimeout);
+        messageTimeout = setTimeout(hideMessage, 3000);
       }
 
-      function hideMessage() { msg.className = "message"; }
+      function hideMessage() {
+        clearTimeout(messageTimeout);
+        msg.className = "message";
+      }
 
       function getRank(n) {
         if (n >= 10) return "Legend";
