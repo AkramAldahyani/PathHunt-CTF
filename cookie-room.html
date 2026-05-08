@@ -42,11 +42,10 @@
 
             <div class="hint-box">
               <strong>Hint</strong>
-              The page sets a cookie that holds the answer to "who are you?"
-              — and then asks the browser the same question back. Whatever
-              the cookie says is taken as truth. The browser is yours;
-              the cookie store is yours. Pick a value the page would
-              consider privileged.
+              The page sets a cookie that holds the answer to "who are you?" —
+              and then asks the browser the same question back. Whatever the
+              cookie says is taken as truth. The browser is yours; the cookie
+              store is yours. Pick a value the page would consider privileged.
             </div>
           </div>
         </div>
@@ -54,9 +53,15 @@
         <div class="panel">
           <div class="panel-title">Your current cookies</div>
           <div class="panel-body">
-            <p style="color: var(--text-dim); font-size: 0.9rem; margin-bottom: 14px">
-              The page has set a cookie in your browser that decides what
-              you're allowed to see. Find it. Change it. Re-check.
+            <p
+              style="
+                color: var(--text-dim);
+                font-size: 0.9rem;
+                margin-bottom: 14px;
+              "
+            >
+              The page has set a cookie in your browser that decides what you're
+              allowed to see. Find it. Change it. Re-check.
             </p>
 
             <p
@@ -69,7 +74,9 @@
               "
             >
               Current role:
-              <span id="current-role" style="color: var(--neon-blue)">user</span>
+              <span id="current-role" style="color: var(--neon-blue)"
+                >user</span
+              >
             </p>
 
             <button class="btn-small" id="check-btn" style="margin-top: 12px">
@@ -115,7 +122,7 @@
 
         function getCookie(name) {
           const match = document.cookie.match(
-            new RegExp("(?:^|; )" + name + "=([^;]*)")
+            new RegExp("(?:^|; )" + name + "=([^;]*)"),
           );
           return match ? decodeURIComponent(match[1]) : null;
         }

@@ -125,8 +125,11 @@
         }
 
         // Fire completion screen once when all flags are captured
-        if (solvedCount === totalFlags && !localStorage.getItem('pathhunt_completed')) {
-          localStorage.setItem('pathhunt_completed', '1');
+        if (
+          solvedCount === totalFlags &&
+          !localStorage.getItem("pathhunt_completed")
+        ) {
+          localStorage.setItem("pathhunt_completed", "1");
           setTimeout(() => showCompletionScreen(progress.score), 600);
         }
 
@@ -158,7 +161,8 @@
           }
 
           const isFinal = i === PATHHUNT.challenges.length - 1;
-          const diffLabel = ["Easy", "Easy", "Medium", "Hard"][ch.difficulty - 1] || "Medium";
+          const diffLabel =
+            ["Easy", "Easy", "Medium", "Hard"][ch.difficulty - 1] || "Medium";
           const numLabel = isFinal
             ? `CHALLENGE ${String(ch.id).padStart(2, "0")} &middot; FINAL`
             : `CHALLENGE ${String(ch.id).padStart(2, "0")}`;

@@ -48,7 +48,7 @@ Then open **http://localhost:3000** in your browser.
 <img src="assets/screenshots/welcome-page-screenshot.png" width="1050">
 
 <strong>Dashboard</strong><br>
-<img src="assets/screenshots/dashbaord-page-screenshot.png" width="1050">
+<img src="assets/screenshots/dashboard-page-screenshot.png" width="1050">
 
 <strong>Submit flags</strong><br>
 <img src="assets/screenshots/submit-page-screenshot.png" width="1050">
